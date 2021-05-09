@@ -36,9 +36,8 @@ class  Miner
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable (false);
-        frame.add(BorderLayout.CENTER, panel);
-        frame.setVisible (true);
-        frame.pack();
+        
+      
         panel.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -47,24 +46,40 @@ class  Miner
                 super.mouseReleased(e);
                 int x = e.getX()/30;
                 int y = e.getY()/30;
-                //System.out.println(x);
-                map[x][y].isClick();
+                System.out.println(x);
+                if (e.getButton() == MouseEvent.BUTTON1)
+                    {
+                        if (map[x][y].isOpen() == false)
+                            {
+                            map[x][y].openCell();
+                             for (int x1 = -1; x1 < 2; x1++)
+                                for (int y1 = -1; y1 < 2; y1++)
+                                    map[x+x1][y+y1].openCell();  
+                            }
+                    
+                    }
                 panel.repaint();
             }
 
         });
+        frame.add(BorderLayout.CENTER, panel);
+        frame.setVisible (true);
+        frame.pack();
         createCell();
     }
 
     private void createCell()
-    { int x,y;
+    { 
+        int x,y;
         for (x = 0; x < 9 ; x++)
+        {
             for (y = 0; y < 9; y++)
                 {
                     map[x][y] = new Cells();
                     map[x][y].setCoord(x,y);
-     
                 }
+        }
+
         for (int planted = 0; planted < countBomb; planted++)
         {  
             do 
@@ -74,8 +89,37 @@ class  Miner
             } while (map[x][y].isBombed());
             map[x][y].setBomb();
         }
-    }
-        
+
+
+        for (x = 0; x < 9; x++)
+        {
+            for (y = 0; y < 9; y++)
+            {
+               if (!map[x][y].isBombed())
+               {
+                   int count = 0;
+                   for (int x1 = -1; x1 < 2; x1++)
+                   {
+                        for (int y1 = -1; y1 < 2; y1++)
+                        {
+                            int dx = x + x1;
+                            int dy = y + y1;
+                            if (dx < 0 || dy < 0 || dx > 9 - 1 || dy > 9 - 1) 
+                            {
+                              dx = x;
+                              dy = y;    
+                            }
+                            if (map[dx][dy].isBombed())
+                                {
+                                count++;
+                                } 
+                        }       
+                        map[x][y].setCountNearBomb(count);
+                    }    
+                }    
+            }
+        }
+    }    
 
     class Panel extends JPanel
     {   
@@ -90,7 +134,7 @@ class  Miner
         }
     }
 
-
+}
    
    /*private class MouseHandler extends MouseAdapter
    {
@@ -99,5 +143,4 @@ class  Miner
     
    }*/
 
-}
 

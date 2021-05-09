@@ -7,12 +7,10 @@ import java.util.*;
 public class Cells extends JComponent
 {  
    private boolean open = false; 
-   private boolean bomb = false;  
+   private boolean bomb = false;
+   private int countBombNear;  
    private int x;
    private int y;
-
-   
-   
 
    public boolean isOpen() 
    {
@@ -28,11 +26,19 @@ public class Cells extends JComponent
       bomb = true;
    } 
 
+   public boolean isFlag()
+   {
+      return false;
+   }
    public void isClick ()
    {
       open = true;
    }
 
+   public void setCountNearBomb (int count)
+   {
+      countBombNear = count;
+   }
    private void paintBomb(Graphics g) 
    {  
       g.setColor(Color.BLACK);
@@ -42,14 +48,15 @@ public class Cells extends JComponent
       g.setColor(Color.WHITE );
       g.fillRect(x*30 + 11, y*30 + 10, 4, 4); 
    }
-   public void openCell(Graphics g)
+   private void paintString (Graphics g, String str)
    {
-      if (open == true)
-      {
-      g.setColor(Color.WHITE);
-      g.fillRect(x*30 , y*30, 30, 30);
       g.setColor(Color.BLACK);
-      }
+      g.setFont(new Font("", Font.BOLD, 30));
+      g.drawString(str, x*30 + 8, y*30 + 26);
+   }
+   public void openCell()
+   {
+      open = true;
    }
    public void setCoord(int x1,  int y2)
    {
@@ -61,12 +68,22 @@ public class Cells extends JComponent
     {    
         g.setColor(Color.lightGray);
         g.drawRect(x*30 , y*30, 30, 30);
-        if(isBombed()) paintBomb(g);
-        else
+        if (open = false)
         {
-           g.setColor(Color.lightGray);
-           g.fill3DRect(x*30,y*30, 30, 30, true);
-        }
-    }
+          if(isBombed()) paintBomb(g);
+            else{
+                  g.setColor(Color.lightGray);
+                  g.fill3DRect(x*30,y*30, 30, 30, true);
+               if (isFlag()) {};
+               }  
+         }
+         else 
+               if (isBombed()) paintBomb(g);
+                  else
+                        if (countBombNear > 0)
+                        paintString(g, Integer.toString(countBombNear)); 
 
+     
+      } 
+    
 }   
