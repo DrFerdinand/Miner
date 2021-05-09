@@ -6,32 +6,50 @@ import java.util.*;
 
 public class Cells extends JComponent
 {  
-   private boolean click = false;   
+   private boolean open = false; 
+   private boolean bomb = false;  
    private int x;
    private int y;
-   boolean open() 
+
+   
+   
+
+   public boolean isOpen() 
    {
-    return false;
+    return open;
    }
-    
-    boolean mined()
+   public boolean isBombed()
    {
-    return false;
+      return bomb;
    }
+
+   public void setBomb()
+   {
+      bomb = true;
+   } 
 
    public void isClick ()
    {
-      if (click)  {click = false;}
-      else if (!click) {click = true;}
+      open = true;
    }
 
-
-   public void click( Graphics g)
+   private void paintBomb(Graphics g) 
+   {  
+      g.setColor(Color.BLACK);
+      g.fillOval(x*30 + 7, y*30 + 7 , 15, 15);
+      g.fillRect(x*30 + 5, y*30 + 13, 20, 4);
+      g.fillRect(x*30 + 13, y*30 + 5, 4, 20);
+      g.setColor(Color.WHITE );
+      g.fillRect(x*30 + 11, y*30 + 10, 4, 4); 
+   }
+   public void openCell(Graphics g)
    {
-      if (click == true)
-      g.setColor(Color.RED);
-      else
-      g.setColor(Color.lightGray); 
+      if (open == true)
+      {
+      g.setColor(Color.WHITE);
+      g.fillRect(x*30 , y*30, 30, 30);
+      g.setColor(Color.BLACK);
+      }
    }
    public void setCoord(int x1,  int y2)
    {
@@ -39,13 +57,16 @@ public class Cells extends JComponent
       y = y2;
    }
 
-
    protected void paintComponent(Graphics g)
-    {
-        click(g);
+    {    
+        g.setColor(Color.lightGray);
         g.drawRect(x*30 , y*30, 30, 30);
+        if(isBombed()) paintBomb(g);
+        else
+        {
+           g.setColor(Color.lightGray);
+           g.fill3DRect(x*30,y*30, 30, 30, true);
+        }
     }
-
-
 
 }   
