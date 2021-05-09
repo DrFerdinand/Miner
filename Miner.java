@@ -46,26 +46,31 @@ class  Miner
                 super.mouseReleased(e);
                 int x = e.getX()/30;
                 int y = e.getY()/30;
-                System.out.println(x);
+                //System.out.println(x);
                 if (e.getButton() == MouseEvent.BUTTON1)
                     {
-                        if (map[x][y].isOpen() == false)
-                            {
-                            map[x][y].openCell();
-                             for (int x1 = -1; x1 < 2; x1++)
-                                for (int y1 = -1; y1 < 2; y1++)
-                                    map[x+x1][y+y1].openCell();  
-                            }
-                    
+                      recursiveOpener(x,y);
                     }
+                if (e.getButton() == MouseEvent.BUTTON3) map[x][y].isFlag();
                 panel.repaint();
-            }
-
+                }
         });
+
         frame.add(BorderLayout.CENTER, panel);
         frame.setVisible (true);
         frame.pack();
         createCell();
+    }
+
+    private void recursiveOpener (int q, int v)
+    {   if ((q < 0 || q > 8 || v < 0 || v > 8)) return;
+        if (map[q][v].isOpen() == false)
+             {
+                map[q][v].openCell();
+             } else return;                 
+                for (int x1 = -1; x1 < 2; x1++)
+                    for (int y1 = -1; y1 < 2; y1++)
+                            recursiveOpener(q + x1, v + y1);
     }
 
     private void createCell()
@@ -133,14 +138,7 @@ class  Miner
 
         }
     }
+}   
 
-}
-   
-   /*private class MouseHandler extends MouseAdapter
-   {
-    @Override
-    public void mouseClicked(MouseEvent e)
-    
-   }*/
 
 
