@@ -13,14 +13,22 @@ public class Cells extends JComponent
    private boolean won = false;
    private static boolean end = false;
 
+   private static int rows;
+   private static int bombs;
+   private static int sizeOfSqrt = 30;
+   private static  int countOpenCells = 0;
 
-   private int sizeOfSqrt = 30;
-   private  int countBombNear = 0;
-   private static  int countOpenCells = 0;  
+   private  int countBombNear = 0;  
    private int x;
    private int y;
 
    private static Color[] color = { Color.BLUE, Color.GREEN, Color.RED, Color.MAGENTA, Color.PINK};
+
+   public void setFieldSize(int rows1, int bombs1)
+   {
+      bombs = bombs1;
+      rows = rows1;
+   }
 
    public boolean isOpen() 
    {
@@ -76,7 +84,7 @@ public class Cells extends JComponent
       open = true;
       bang =  bomb;
       countOpenCells++;
-      if(countOpenCells >= 71){ won = true;}
+      if(countOpenCells >= rows*rows-bombs){ won = true;}
       
    }
 

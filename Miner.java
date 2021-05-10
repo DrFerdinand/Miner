@@ -1,15 +1,14 @@
 import java.awt.*;
 import javax.swing.*;
-import java.io.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.*; // Адаптер мыши
+import java.util.*; //Рандом
 
 class  Miner
 {   
     int x = 0;
     int y = 0;
     int countBomb = 10;
-    int sizeOfFeild = 9;
+    int sizeOfFeild = 8;
     boolean end = false;
     Cells[][] map = new Cells[sizeOfFeild][sizeOfFeild];
     JFrame frame = new JFrame("Miner"); 
@@ -33,9 +32,9 @@ class  Miner
 
     private void panelInit()
     {   
-        
 
-        panel.setPreferredSize(new Dimension(270,270));
+        panel.setPreferredSize(new Dimension(30*sizeOfFeild, 30*sizeOfFeild));
+
         panel.setBackground(Color.WHITE);
 
         frame.setLocationRelativeTo(null);
@@ -47,11 +46,11 @@ class  Miner
         {
             @Override
             public void mouseReleased(MouseEvent e)
-            {
+            {   
                 super.mouseReleased(e);
                 
-                int x = e.getX()/30;
-                int y = e.getY()/30;
+                x = e.getX()/30;
+                y = e.getY()/30;
 
                 if (e.getButton() == MouseEvent.BUTTON1)
                     {
@@ -60,6 +59,7 @@ class  Miner
                     }
                 if (e.getButton() == MouseEvent.BUTTON3) map[x][y].isFlag();
                 if (end == true) map[x][y].End(end);
+
                  panel.repaint();
                 if (end == true) panel.removeMouseListener(this);
                 }
@@ -81,7 +81,9 @@ class  Miner
         frame.setVisible (true);
         frame.setIconImage(getImage("icon"));
         frame.pack();
+
         createCell();
+        map[0][0].setFieldSize(sizeOfFeild,countBomb);
     }
    
 
