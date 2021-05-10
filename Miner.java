@@ -79,6 +79,7 @@ class  Miner
         frame.add(BorderLayout.SOUTH, restartButton);
         frame.add(BorderLayout.CENTER, panel);
         frame.setVisible (true);
+        frame.setIconImage(getImage("icon"));
         frame.pack();
         createCell();
     }
@@ -150,6 +151,14 @@ class  Miner
             }
         }
     }    
+
+
+    private Image getImage (String name)
+    {
+        String filename = "res/" + name.toLowerCase() + ".png"; 
+        ImageIcon icon = new ImageIcon (getClass().getResource(filename));
+        return icon.getImage();
+    }
 
     class Panel extends JPanel
     {   
