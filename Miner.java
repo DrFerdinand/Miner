@@ -6,14 +6,18 @@ import java.util.*;
 
 class  Miner
 {   
+    int x = 0;
+    int y = 0;
     int countBomb = 10;
-    int SIZE_CELL = 30;
+    int sizeOfFeild = 9;
     boolean end = false;
-
+    Cells[][] map = new Cells[sizeOfFeild][sizeOfFeild];
     JFrame frame = new JFrame("Miner"); 
     Panel panel = new Panel();
     Random random = new Random();
-    Cells[][] map = new Cells[9][9];
+    
+
+    JButton restartButton = new JButton("Restart");
 
     public static void main (String[]  args)
     {
@@ -29,6 +33,7 @@ class  Miner
 
     private void panelInit()
     {   
+        
 
         panel.setPreferredSize(new Dimension(270,270));
         panel.setBackground(Color.WHITE);
@@ -60,6 +65,18 @@ class  Miner
                 }
         });
 
+        restartButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {   
+                
+                panelInit();
+                end = false;
+                map[x][y].refresh();
+                
+            }
+        });
+
+        frame.add(BorderLayout.SOUTH, restartButton);
         frame.add(BorderLayout.CENTER, panel);
         frame.setVisible (true);
         frame.pack();
@@ -68,7 +85,7 @@ class  Miner
    
 
     private void recursiveOpener (int q, int v)
-    {   if ((q < 0 || q > 8 || v < 0 || v > 8)) return;
+    {   if ((q < 0 || q > sizeOfFeild -1 || v < 0 || v > sizeOfFeild - 1)) return;
         if (map[q][v].isOpen() == false)
              {
                 map[q][v].openCell();
@@ -84,9 +101,9 @@ class  Miner
     private void createCell()
     { 
         int x,y;
-        for (x = 0; x < 9 ; x++)
+        for (x = 0; x < sizeOfFeild ; x++)
         {
-            for (y = 0; y < 9; y++)
+            for (y = 0; y < sizeOfFeild; y++)
                 {
                     map[x][y] = new Cells();
                     map[x][y].setCoord(x,y);
@@ -97,16 +114,16 @@ class  Miner
         {  
             do 
             {
-              x = random.nextInt(9);
-              y = random.nextInt(9);
+              x = random.nextInt(sizeOfFeild);
+              y = random.nextInt(sizeOfFeild);
             } while (map[x][y].isBombed());
             map[x][y].setBomb();
         }
 
 
-        for (x = 0; x < 9; x++)
+        for (x = 0; x < sizeOfFeild; x++)
         {
-            for (y = 0; y < 9; y++)
+            for (y = 0; y < sizeOfFeild; y++)
             {
                if (!map[x][y].isBombed())
                {
@@ -117,7 +134,7 @@ class  Miner
                         {
                             int dx = x + x1;
                             int dy = y + y1;
-                            if (dx < 0 || dy < 0 || dx > 9 - 1 || dy > 9 - 1) 
+                            if (dx < 0 || dy < 0 || dx > sizeOfFeild - 1 || dy > sizeOfFeild - 1) 
                             {
                               dx = x;
                               dy = y;    
@@ -140,8 +157,8 @@ class  Miner
         public void paint(Graphics g) 
         {
             super.paint(g);
-            for (int x = 0; x < 9 ; x++)
-                for (int y = 0; y < 9; y++) 
+            for (int x = 0; x < sizeOfFeild ; x++)
+                for (int y = 0; y < sizeOfFeild; y++) 
                     map[y][x].paintComponent(g);
         }
     }
