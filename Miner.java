@@ -6,10 +6,10 @@ import java.util.*;
 
 class  Miner
 {   
-    
-
     int countBomb = 10;
     int SIZE_CELL = 30;
+    boolean end = false;
+
     JFrame frame = new JFrame("Miner"); 
     Panel panel = new Panel();
     Random random = new Random();
@@ -31,7 +31,7 @@ class  Miner
     {   
 
         panel.setPreferredSize(new Dimension(270,270));
-        panel.setBackground(Color.lightGray);
+        panel.setBackground(Color.WHITE);
 
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -44,15 +44,19 @@ class  Miner
             public void mouseReleased(MouseEvent e)
             {
                 super.mouseReleased(e);
+                
                 int x = e.getX()/30;
                 int y = e.getY()/30;
-                //System.out.println(x);
+
                 if (e.getButton() == MouseEvent.BUTTON1)
                     {
                       recursiveOpener(x,y);
+                      if (map[x][y].getWon() || map[x][y].getFail()){end = true;}
                     }
                 if (e.getButton() == MouseEvent.BUTTON3) map[x][y].isFlag();
-                panel.repaint();
+                if (end == true) map[x][y].End(end);
+                 panel.repaint();
+                if (end == true) panel.removeMouseListener(this);
                 }
         });
 
@@ -61,16 +65,20 @@ class  Miner
         frame.pack();
         createCell();
     }
+   
 
     private void recursiveOpener (int q, int v)
     {   if ((q < 0 || q > 8 || v < 0 || v > 8)) return;
         if (map[q][v].isOpen() == false)
              {
                 map[q][v].openCell();
-             } else return;                 
-                for (int x1 = -1; x1 < 2; x1++)
-                    for (int y1 = -1; y1 < 2; y1++)
-                            recursiveOpener(q + x1, v + y1);
+             } else return;
+
+        if (map[q][v].getCountNearBomb() > 0) return;
+
+        for (int x1 = -1; x1 < 2; x1++)
+            for (int y1 = -1; y1 < 2; y1++)
+                recursiveOpener(q + x1, v + y1);
     }
 
     private void createCell()
@@ -135,7 +143,6 @@ class  Miner
             for (int x = 0; x < 9 ; x++)
                 for (int y = 0; y < 9; y++) 
                     map[y][x].paintComponent(g);
-
         }
     }
 }   
